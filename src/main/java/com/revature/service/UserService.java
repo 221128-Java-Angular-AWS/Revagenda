@@ -3,6 +3,8 @@ package com.revature.service;
 import com.revature.persistence.UserDao;
 import com.revature.pojos.User;
 
+import java.util.Set;
+
 public class UserService {
     private UserDao dao;
 
@@ -16,6 +18,11 @@ public class UserService {
             //validation - user input
             //logging
         dao.create(user);
+    }
+
+
+    public Set<User> getAllUsers() {
+        return dao.getAllUsers();
     }
 
 }
