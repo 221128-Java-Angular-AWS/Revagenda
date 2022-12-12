@@ -8,13 +8,6 @@ import java.sql.*;
 import java.util.HashSet;
 import java.util.Set;
 
-/*
-//get generated keys
-CRUD - Create, Read, Update, Delete
-
-validation - part of the service layer
-
- */
 
 public class UserDao {
     private Connection connection;
