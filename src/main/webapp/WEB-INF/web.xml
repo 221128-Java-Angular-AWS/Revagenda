@@ -37,6 +37,16 @@
         <url-pattern>/users</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>authenticationServlet</servlet-name>
+        <servlet-class>com.revature.servlet.AuthenticationServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>authenticationServlet</servlet-name>
+        <url-pattern>/users/auth</url-pattern>
+    </servlet-mapping>
+
 
 
 

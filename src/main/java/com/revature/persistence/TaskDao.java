@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Set;
 
 public class TaskDao {
     private Connection connection;
@@ -30,7 +32,7 @@ public class TaskDao {
         }
     }
 
-    public Task read(Integer id) {
+    public Task getTaskById(Integer id) {
         Task task = new Task();
 
         try {
@@ -52,6 +54,36 @@ public class TaskDao {
         }
 
         return task;
+    }
+
+/*
+        this.taskId = taskId;
+        this.title = title;
+        this.description = description;
+        this.completed = completed;
+        this.userId = userId;
+ */
+    public Set<Task> getAllTasksForUser(Integer userId) {
+        Set<Task> tasks = new HashSet<>();
+        try {
+            String sql = "SELECT * FROM tasks WHERE user_id = ?";
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1, userId);
+            ResultSet rs = pstmt.executeQuery();
+
+
+            while(rs.next()) {
+                tasks.add(new Task(rs.getInt("user_id"),
+                        rs.getString("title"),
+                        rs.getString("description"),
+                        rs.getBoolean("completed"),
+                        rs.getInt("user_id")));
+            }
+
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return tasks;
     }
 
     public void update(Task task) {

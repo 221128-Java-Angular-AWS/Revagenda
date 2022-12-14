@@ -65,28 +65,54 @@ public class UserDao {
         }
     }
 
+    public User getUserById(Integer userId) {
+        User user = new User();
+        try {
+            String sql = "SELECT * FROM users WHERE user_id = ?";
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1, userId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if(rs.next()) {
+                user = new User(rs.getInt("user_id"), rs.getString("first_name"),
+                        rs.getString("last_name"), rs.getString("username"), rs.getString("password"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
+
+
     public Set<User> getAllUsers() {
+        Set<User> results = new HashSet<>();
         try {
             String sql = "SELECT * FROM users";
             PreparedStatement pstmt = connection.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery();
-            Set<User> results = new HashSet<>();
+
             while(rs.next()) {
-                User user = new User(rs.getInt("user_id"), rs.getString("first_name"),
-                        rs.getString("last_name"), rs.getString("username"), rs.getString("password"));
-                results.add(user);
+                results.add( new User(rs.getInt("user_id"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getString("username"),
+                        rs.getString("password")));
             }
 
-            return results;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return results;
     }
 
 
 
-    public void update(User user) {
+
+
+
+
+    public void updateUser(User user) {
         try {
             String sql = "UPDATE users SET first_name = ?, last_name = ?, username = ?, password = ? WHERE user_id = ?";
             PreparedStatement pstmt = connection.prepareStatement(sql);
@@ -103,12 +129,11 @@ public class UserDao {
     }
 
 
-    public void delete(User user) {
-
+    public void deleteUser(Integer userId) {
         try {
             String sql = "DELETE FROM users WHERE user_id = ?";
             PreparedStatement pstmt = connection.prepareStatement(sql);
-            pstmt.setInt(1, user.getUserId());
+            pstmt.setInt(1, userId);
 
             pstmt.executeUpdate();
 
