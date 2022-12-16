@@ -2,7 +2,7 @@ package com.revature.pojos;
 
 import java.util.Objects;
 
-public class User {
+public class User implements Comparable<User>{
     private Integer userId;
     private String firstName;
     private String lastName;
@@ -11,6 +11,11 @@ public class User {
 
 
     public User() {
+    }
+
+    public User(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     public User(Integer userId, String firstName, String lastName, String username, String password) {
@@ -90,5 +95,57 @@ public class User {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(User that) {
+        //return negative if this < that
+        //return positive that < this
+        //return zero if equal
+
+        // User1 < User2 when user1.getLastName() < user2.getLastName() alphabetically, with first name
+        //being used the same way as a tiebreaker
+
+        if(this.equals(that)) {
+            return 0;
+        }
+
+        if(this.getLastName().equals(that.getLastName())) {
+            if(this.getFirstName().equals(that.getFirstName())) {
+                return 0;
+            }
+        } else {
+            return alphabeticalCompare(this.getFirstName(), that.getFirstName());
+        }
+
+        return alphabeticalCompare(this.getLastName(), that.getLastName());
+    }
+
+    private int alphabeticalCompare(String a, String b) {
+        int size;
+        char shorter = 'z';
+        if(a.length() <= b.length()) {
+            size = a.length();
+            shorter = 'a';
+        } else {
+            size = b.length();
+            shorter = 'b';
+        }
+
+        for(int i = 0; i < size; i++) {
+            if(a.charAt(i) < b.charAt(i)) {
+                return -1;
+            } else if(a.charAt(i) > b.charAt(i)) {
+                return 1;
+            }
+        }
+
+        if(shorter == 'z') {
+            return 0;
+        } else if (shorter == 'a') {
+            return -1;
+        } else {
+            return 1;
+        }
     }
 }
